@@ -6,7 +6,7 @@
     <StackLayout class="form">
       <StackLayout class="input-field">
         <Label class="label">Reminder time</Label>
-        <TimePicker v-model="time"></TimePicker>
+        <TimePicker v-model="time" @timeChanged="onTimeChanged"></TimePicker>
       </StackLayout>
     </StackLayout>
   </Page>

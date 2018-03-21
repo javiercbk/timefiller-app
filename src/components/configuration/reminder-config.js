@@ -20,10 +20,6 @@ export default {
     };
   },
   watch: {
-    time(newTime) {
-      console.log(`time changed ${newTime}`);
-      console.log(`time changed type ${typeof newTime}`);
-    },
     hour() {
       this.saveConfig();
     },
@@ -45,6 +41,9 @@ export default {
   },
   methods: {
     ...mapActions('user', ['setReminder']),
+    onTimeChanged(newTime) {
+      console.log(`time has changed to ${newTime}`);
+    },
     saveConfig() {
       console.log(`setting reminder at ${this.hour}:${this.minute}`);
       this.setReminder({
