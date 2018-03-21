@@ -1,7 +1,7 @@
 import { mapActions, mapGetters } from 'vuex';
 import moment from 'moment';
 
-const DEFAULT_DATE = moment.utc('1899-12-31T10:00:00:000', 'YYYY-MM-DDTHH:mm:ss.sss');
+const DEFAULT_DATE = moment('1899-12-31T10:00:00:000', 'YYYY-MM-DDTHH:mm:ss.sss');
 
 export default {
   mounted() {
@@ -34,7 +34,7 @@ export default {
   computed: {
     ...mapGetters('user', ['reminder']),
     parsedTime() {
-      return moment.utc(this.time);
+      return moment(this.time, 'YYYY-MM-DDTHH:mm:ss.sss');
     },
     hour() {
       return this.parsedTime.hour();
