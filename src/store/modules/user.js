@@ -1,5 +1,6 @@
 /* eslint-disable no-shadow */
 import * as fs from 'tns-core-modules/file-system';
+import { readFileAndInitialize, storeDataBeforeCommit, hasFalsyProperty } from './helpers';
 
 const documents = fs.knownFolders.documents();
 const configFile = documents.getFile('config.json');
@@ -25,28 +26,6 @@ const state = {
   }
 };
 
-const storeDataBeforeCommit = (options) => {
-  const newData = {};
-  newData[options.prop] = options.payload;
-  const newUserState = Object.assign({}, options.state, newData);
-  const dataToWrite = JSON.stringify(newUserState);
-  return configFile
-    .writeText(dataToWrite)
-    .then(() => {
-      options.commit(options.action, options.payload);
-    })
-    .catch((err) => {
-      console.error(`Error writing config file: ${err.message || err} => ${err.stack}`);
-    });
-};
-
-const hasFalsyProperty = (obj) => {
-  const keys = Object.keys(obj);
-  const len = keys.length;
-  const nonFalsyLen = Object.keys(obj).filter(k => obj[k]).length;
-  return len > nonFalsyLen;
-};
-
 const getters = {
   isConfigured: storeState =>
     !hasFalsyProperty(storeState.jira) &&
@@ -60,7 +39,8 @@ const getters = {
     jira: storeState.jira,
     harvest: storeState.harvest,
     waka: storeState.waka
-  })
+  }),
+  workLogs: storeState => storeState.workLogs
 };
 
 const mutations = {
@@ -82,61 +62,50 @@ const mutations = {
 };
 
 const actions = {
-  setJira: ({ commit, state }, payload) => {
+  setJira: ({ commit, state }, payload) =>
     storeDataBeforeCommit({
       commit,
       state,
       payload,
+      file: configFile,
       prop: 'jira',
       action: 'setJira'
-    });
-  },
-  setHarvest: ({ commit }, payload) => {
+    }),
+  setHarvest: ({ commit }, payload) =>
     storeDataBeforeCommit({
       commit,
       state,
       payload,
+      file: configFile,
       prop: 'harvest',
       action: 'setHarvest'
-    });
-  },
-  setWaka: ({ commit }, payload) => {
+    }),
+  setWaka: ({ commit }, payload) =>
     storeDataBeforeCommit({
       commit,
       state,
       payload,
+      file: configFile,
       prop: 'waka',
       action: 'setWaka'
-    });
-  },
-  setReminder: ({ commit }, payload) => {
+    }),
+  setReminder: ({ commit }, payload) =>
     storeDataBeforeCommit({
       commit,
       state,
       payload,
+      file: configFile,
       prop: 'reminder',
       action: 'setReminder'
-    });
-  },
-  load: ({ commit, state }) => {
-    if (!state.initialized) {
-      return configFile
-        .readText()
-        .then((storedConfig) => {
-          if (storedConfig === '') {
-            return state;
-          }
-          const conf = JSON.parse(storedConfig);
-          conf.initialized = true;
-          commit('setUser', conf);
-          return conf;
-        })
-        .catch((err) => {
-          console.error(`Error reading config file: ${err.message || err} JSON: ${JSON.stringify(err)}`);
-        });
-    }
-    return Promise.resolve(state);
-  }
+    }),
+  load: ({ commit, state }) =>
+    readFileAndInitialize({
+      commit,
+      state,
+      initProp: 'initialized',
+      file: configFile,
+      action: 'setUser'
+    })
 };
 
 module.exports = {
