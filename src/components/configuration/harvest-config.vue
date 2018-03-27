@@ -6,15 +6,15 @@
     <StackLayout class="form">
       <StackLayout class="input-field">
         <Label class="label">Subdomain</Label>
-        <TextField v-model="subdomain" hint="company" class="input"></TextField>
+        <TextField v-model="subdomain" hint="company" class="input" autocorrect="false"></TextField>
       </StackLayout>
       <StackLayout class="input-field">
         <Label class="label">Email</Label>
-        <TextField v-model="email" class="input"></TextField>
+        <TextField v-model="email" class="input" keyboardType="email" autocorrect="false"></TextField>
       </StackLayout>
       <StackLayout class="input-field">
         <Label class="label">Password</Label>
-        <TextField v-model="password" :secure="true" class="input"></TextField>
+        <TextField v-model="password" :secure="true" class="input" autocorrect="false"></TextField>
       </StackLayout>
     </StackLayout>
   </Page>

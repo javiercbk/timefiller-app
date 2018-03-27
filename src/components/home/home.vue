@@ -5,8 +5,7 @@
     </StackLayout>
     <DockLayout v-show="worklogsLoaded && isConfigured" stretchLastChild="false">
       <StackLayout dock="top">
-        <Label class="body" text="Worklogs will be here"/>
-        <!-- <worklog-list></worklog-list> -->
+        <worklog-list></worklog-list>
       </StackLayout>
       <Button dock="bottom" class="btn btn-primary" text="Add worklog" @tap="navigateAddWorklog"/>
     </DockLayout>

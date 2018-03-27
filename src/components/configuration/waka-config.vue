@@ -6,7 +6,7 @@
     <StackLayout class="form">
       <StackLayout class="input-field">
         <Label class="label">API key</Label>
-        <TextField v-model="apiKey" class="input"></TextField>
+        <TextField v-model="apiKey" class="input" autocorrect="false"></TextField>
       </StackLayout>
     </StackLayout>
   </Page>
