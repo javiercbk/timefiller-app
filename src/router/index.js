@@ -9,6 +9,7 @@ import ConfigJira from '../components/configuration/jira-config.vue';
 import ConfigHarvest from '../components/configuration/harvest-config.vue';
 import ConfigWaka from '../components/configuration/waka-config.vue';
 import ConfigReminder from '../components/configuration/reminder-config.vue';
+import WorklogCreate from '../components/worklogs/worklog-create.vue';
 import Home from '../components/home/home.vue';
 
 const router = new VueRouter({
@@ -40,9 +41,14 @@ const router = new VueRouter({
       component: ConfigWaka
     },
     {
-      path: 'reminder',
+      path: '/reminder',
       name: 'config-reminder',
       component: ConfigReminder
+    },
+    {
+      path: '/worklog/create',
+      name: 'add-worklog',
+      component: WorklogCreate
     },
     { path: '*', redirect: '/home' }
   ]

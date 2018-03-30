@@ -1,5 +1,11 @@
 <template>
   <Page class="page" :actionBarHidden="!isConfigured || !userLoaded" backgroundSpanUnderStatusBar="true">
+    <ActionBar class="action-bar" title="Worklogs">
+      <ActionItem @tap="navigateConfiguration"
+        v-show="userLoaded && isConfigured"
+        ios.systemIcon="2" ios.position="right"
+        android.systemIcon="ic_menu_edit" />
+    </ActionBar>
     <StackLayout v-show="!userLoaded || !worklogsLoaded">
       <ActivityIndicator :busy="!userLoaded || !worklogsLoaded" horizontalAlignment="stretch" verticalAlignment="stretch"/>
     </StackLayout>

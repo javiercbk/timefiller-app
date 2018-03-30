@@ -9,7 +9,7 @@
       "type": "nativescript",
       "request": "attach",
       "platform": "ios",
-      "appRoot": "${workspaceRoot}",
+      "appRoot": "${workspaceRoot}/dist",
       "sourceMaps": true,
       "watch": false
     },
@@ -18,7 +18,7 @@
       "type": "nativescript",
       "request": "attach",
       "platform": "android",
-      "appRoot": "${workspaceRoot}",
+      "appRoot": "${workspaceRoot}/dist",
       "sourceMaps": true,
       "watch": false
     }
