@@ -1,8 +1,11 @@
-# JetBrains project files
+.DS_Store
+.atom/
+.dart_tool/
 .idea
-
-# NPM
-node_modules
-
-# NativeScript application
-/dist
+.vscode/
+.packages
+.pub/
+build/
+ios/.generated/
+packages
+.flutter-plugins
