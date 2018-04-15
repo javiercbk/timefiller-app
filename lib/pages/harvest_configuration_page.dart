@@ -2,39 +2,37 @@ import 'package:flutter/material.dart';
 
 import './user_configuration.dart';
 
-typedef void ChangeListener(String data);
-
-class JiraConfigurationPage extends StatefulWidget {
+class HarvestConfigurationPage extends StatefulWidget {
   @override
-  _JiraConfigurationPage createState() => new _JiraConfigurationPage();
+  _HarvestConfigurationPage createState() => new _HarvestConfigurationPage();
 }
 
-class _JiraConfigurationPage
-    extends UserConfigurationPage<JiraConfigurationPage> {
-  _JiraConfigurationPage() : super();
+class _HarvestConfigurationPage
+    extends UserConfigurationPage<HarvestConfigurationPage> {
+  _HarvestConfigurationPage() : super();
 
   @override
   initialize() {
     controllers.add(new ControllableFormProperty(new FormProperty<String>(
         icon: Icons.home,
-        name: 'Host',
+        name: 'Subdomain',
         keyboardType: TextInputType.url,
-        initialValue: user.jira.host,
+        initialValue: user.harvest.subdomain,
         isPassword: false,
-        onChange: (String host) {
-          user.jira.host = host;
+        onChange: (String subdomain) {
+          user.harvest.subdomain = subdomain;
         })));
     controllers.add(new ControllableFormProperty(new FormProperty<String>.email(
         name: 'Email',
-        initialValue: user.jira.username,
-        onChange: (String username) {
-          user.jira.username = username;
+        initialValue: user.harvest.email,
+        onChange: (String email) {
+          user.harvest.email = email;
         })));
     controllers
         .add(new ControllableFormProperty(new FormProperty<String>.password(
             name: 'Password',
             onChange: (String password) {
-              user.jira.password = password;
+              user.harvest.password = password;
             })));
     super.initialize();
   }

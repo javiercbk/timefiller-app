@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class PasswordField extends StatefulWidget {
-  const PasswordField({
+class PasswordFormField extends StatefulWidget {
+  const PasswordFormField({
     this.fieldKey,
     this.hintText,
     this.labelText,
@@ -20,10 +20,10 @@ class PasswordField extends StatefulWidget {
   final ValueChanged<String> onFieldSubmitted;
 
   @override
-  _PasswordFieldState createState() => new _PasswordFieldState();
+  _PasswordFormFieldState createState() => new _PasswordFormFieldState();
 }
 
-class _PasswordFieldState extends State<PasswordField> {
+class _PasswordFormFieldState extends State<PasswordFormField> {
   bool _obscureText = true;
 
   @override
@@ -34,6 +34,73 @@ class _PasswordFieldState extends State<PasswordField> {
       onSaved: widget.onSaved,
       validator: widget.validator,
       onFieldSubmitted: widget.onFieldSubmitted,
+      decoration: new InputDecoration(
+        border: const UnderlineInputBorder(),
+        hintText: widget.hintText,
+        labelText: widget.labelText,
+        helperText: widget.helperText,
+        suffixIcon: new GestureDetector(
+          onTap: () {
+            setState(() {
+              _obscureText = !_obscureText;
+            });
+          },
+          child:
+              new Icon(_obscureText ? Icons.visibility : Icons.visibility_off),
+        ),
+      ),
+    );
+  }
+}
+
+class PasswordField extends StatefulWidget {
+  const PasswordField({
+    this.fieldKey,
+    this.hintText,
+    this.labelText,
+    this.helperText,
+    this.onSaved,
+  });
+
+  final Key fieldKey;
+  final String hintText;
+  final String labelText;
+  final String helperText;
+  final FormFieldSetter<String> onSaved;
+
+  @override
+  _PasswordFieldState createState() => new _PasswordFieldState();
+}
+
+class _PasswordFieldState extends State<PasswordField> {
+  final TextEditingController _passwordController = new TextEditingController();
+  VoidCallback _passwordListener;
+  bool _initialized = false;
+  bool _obscureText = true;
+
+  _initialize() {
+    VoidCallback _passwordListener = () {
+      widget.onSaved(_passwordController.text);
+    };
+    _passwordController.addListener(_passwordListener);
+  }
+
+  @override
+  dispose() {
+    _passwordController.removeListener(_passwordListener);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!_initialized) {
+      _initialize();
+      _initialized = true;
+    }
+    return new TextField(
+      key: widget.fieldKey,
+      obscureText: _obscureText,
+      controller: _passwordController,
       decoration: new InputDecoration(
         border: const UnderlineInputBorder(),
         hintText: widget.hintText,

@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import './jira_configuration_page.dart';
+import './harvest_configuration_page.dart';
+import './waka_configuration_page.dart';
 
 class ConfigurationPage extends StatelessWidget {
   ConfigurationPage({Key key}) : super(key: key);
@@ -38,7 +40,7 @@ class ConfigurationPage extends StatelessWidget {
                                 context,
                                 new MaterialPageRoute(
                                     builder: (context) =>
-                                        new JiraConfigurationPage()),
+                                        new HarvestConfigurationPage()),
                               );
                             },
                             child: new Text('Harvest'))),
@@ -50,7 +52,7 @@ class ConfigurationPage extends StatelessWidget {
                                 context,
                                 new MaterialPageRoute(
                                     builder: (context) =>
-                                        new JiraConfigurationPage()),
+                                        new WakaConfigurationPage()),
                               );
                             },
                             child: new Text('WakaTime')))
