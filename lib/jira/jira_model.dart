@@ -40,77 +40,61 @@ class AddWorklogRequest {
 }
 
 class AddWorklogResponse {
-  Author author;
-  String comment;
-  String created;
-  String id;
-  String issueId;
-  Map<String, dynamic> properties;
   String self;
+  Author author;
+  Author updateAuthor;
+  String created;
+  String updated;
   String started;
   String timeSpent;
   int timeSpentSeconds;
-  Author updateAuthor;
-  String updated;
-  Visibility visibility;
+  String id;
+  String issueId;
 
   AddWorklogResponse(
-      {this.author,
-      this.comment,
+      {this.self,
+      this.author,
+      this.updateAuthor,
       this.created,
-      this.id,
-      this.issueId,
-      this.properties,
-      this.self,
+      this.updated,
       this.started,
       this.timeSpent,
       this.timeSpentSeconds,
-      this.updateAuthor,
-      this.updated,
-      this.visibility});
+      this.id,
+      this.issueId});
 
   AddWorklogResponse.fromJson(Map<String, dynamic> json) {
+    self = json['self'];
     author =
         json['author'] != null ? new Author.fromJson(json['author']) : null;
-    comment = json['comment'];
-    created = json['created'];
-    id = json['id'];
-    issueId = json['issueId'];
-    properties = json['properties'];
-    self = json['self'];
-    started = json['started'];
-    timeSpent = json['timeSpent'];
-    timeSpentSeconds = json['timeSpentSeconds'];
     updateAuthor = json['updateAuthor'] != null
         ? new Author.fromJson(json['updateAuthor'])
         : null;
+    created = json['created'];
     updated = json['updated'];
-    visibility = json['visibility'] != null
-        ? new Visibility.fromJson(json['visibility'])
-        : null;
+    started = json['started'];
+    timeSpent = json['timeSpent'];
+    timeSpentSeconds = json['timeSpentSeconds'];
+    id = json['id'];
+    issueId = json['issueId'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['self'] = this.self;
     if (this.author != null) {
       data['author'] = this.author.toJson();
     }
-    data['comment'] = this.comment;
-    data['created'] = this.created;
-    data['id'] = this.id;
-    data['issueId'] = this.issueId;
-    data['properties'] = this.properties;
-    data['self'] = this.self;
-    data['started'] = this.started;
-    data['timeSpent'] = this.timeSpent;
-    data['timeSpentSeconds'] = this.timeSpentSeconds;
     if (this.updateAuthor != null) {
       data['updateAuthor'] = this.updateAuthor.toJson();
     }
+    data['created'] = this.created;
     data['updated'] = this.updated;
-    if (this.visibility != null) {
-      data['visibility'] = this.visibility.toJson();
-    }
+    data['started'] = this.started;
+    data['timeSpent'] = this.timeSpent;
+    data['timeSpentSeconds'] = this.timeSpentSeconds;
+    data['id'] = this.id;
+    data['issueId'] = this.issueId;
     return data;
   }
 }

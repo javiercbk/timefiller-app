@@ -1,0 +1,50 @@
+{
+  "self": "https://protranslating.atlassian.net/rest/api/2/issue/1/worklog/8",
+  "author": {
+    "self": "https://testdomain.atlassian.net/rest/api/2/user?username=sample",
+    "name": "sample",
+    "key": "sample",
+    "accountId": "1:1",
+    "emailAddress": "sample@email.com",
+    "avatarUrls": {
+      "48x48":
+        "https://avatar-cdn.atlassian.com/1?s=48&d=https%3A%2F%2Fsecure.gravatar.com%2F148%26noRedirect%3Dtrue",
+      "24x24":
+        "https://avatar-cdn.atlassian.com/1?s=24&d=https%3A%2F%2Fsecure.gravatar.com%2F124%26noRedirect%3Dtrue",
+      "16x16":
+        "https://avatar-cdn.atlassian.com/1?s=16&d=https%3A%2F%2Fsecure.gravatar.com%2F116%26noRedirect%3Dtrue",
+      "32x32":
+        "https://avatar-cdn.atlassian.com/1?s=32&d=https%3A%2F%2Fsecure.gravatar.com%2F132%26noRedirect%3Dtrue"
+    },
+    "displayName": "Sample Test",
+    "active": true,
+    "timeZone": "America/Argentina/Buenos_Aires"
+  },
+  "updateAuthor": {
+    "self": "https://testdomain.atlassian.net/rest/api/2/user?username=sample",
+    "name": "sample",
+    "key": "sample",
+    "accountId": "1:1",
+    "emailAddress": "sample@email.com",
+    "avatarUrls": {
+      "48x48":
+        "https://avatar-cdn.atlassian.com/1?s=48&d=https%3A%2F%2Fsecure.gravatar.com%2F148%26noRedirect%3Dtrue",
+      "24x24":
+        "https://avatar-cdn.atlassian.com/1?s=24&d=https%3A%2F%2Fsecure.gravatar.com%2F124%26noRedirect%3Dtrue",
+      "16x16":
+        "https://avatar-cdn.atlassian.com/1?s=16&d=https%3A%2F%2Fsecure.gravatar.com%2F116%26noRedirect%3Dtrue",
+      "32x32":
+        "https://avatar-cdn.atlassian.com/1?s=32&d=https%3A%2F%2Fsecure.gravatar.com%2F132%26noRedirect%3Dtrue"
+    },
+    "displayName": "Sample Test",
+    "active": true,
+    "timeZone": "America/Argentina/Buenos_Aires"
+  },
+  "created": "2018-04-26T00:50:27.664-0400",
+  "updated": "2018-04-26T00:50:27.664-0400",
+  "started": "2018-04-25T02:00:00.000-0400",
+  "timeSpent": "7h 56m",
+  "timeSpentSeconds": 28560,
+  "id": "8",
+  "issueId": "1"
+}

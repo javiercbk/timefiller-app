@@ -29,7 +29,8 @@ class JiraRestAPI {
     final uri = new Uri(
         scheme: 'https',
         host: _host,
-        path: 'rest/api/2/issue/$issueId/worklog?adjustEstimate=auto');
+        path: 'rest/api/2/issue/$issueId/worklog',
+        queryParameters: const {'adjustEstimate': 'auto'});
     final addWorklogRequest =
         new AddWorklogRequest(started: date, timeSpentSeconds: seconds);
     final bodyStr = json.encode(addWorklogRequest.toJson());
