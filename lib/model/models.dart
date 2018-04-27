@@ -33,27 +33,27 @@ class Jira extends JSONSerializable {
 
 class Harvest extends JSONSerializable {
   String subdomain;
-  String email;
-  String password;
+  String accountId;
+  String token;
 
   Harvest() {
     subdomain = '';
-    email = '';
-    password = '';
+    accountId = '';
+    token = '';
   }
 
   Harvest.fromJson(Map<String, dynamic> json)
       : subdomain = json['subdomain'],
-        email = json['email'],
-        password = json['password'];
+        accountId = json['accountId'],
+        token = json['token'];
 
   Map<String, dynamic> toJson() =>
-      {subdomain: 'subdomain', email: 'email', password: 'password'};
+      {subdomain: 'subdomain', accountId: 'accountId', token: 'token'};
 
   bool get completed {
     final completedSubdomain = subdomain != null && subdomain.isNotEmpty;
-    final completedEmail = email != null && email.isNotEmpty;
-    final completedPassword = password != null && password.isNotEmpty;
+    final completedEmail = accountId != null && accountId.isNotEmpty;
+    final completedPassword = accountId != null && accountId.isNotEmpty;
     return completedSubdomain && completedEmail && completedPassword;
   }
 }

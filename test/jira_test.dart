@@ -1,19 +1,13 @@
-// This is a basic Flutter widget test.
-// To perform an interaction with a widget in your test, use the WidgetTester utility that Flutter
-// provides. For example, you can send tap and scroll gestures. You can also use WidgetTester to
-// find child widgets in the widget tree, read text, and verify that the values of widget properties
-// are correct.
 import "dart:io";
 import "package:test/test.dart";
 import "package:path/path.dart" show dirname, join, normalize;
 import 'package:http/http.dart' as http;
-import "../lib/jira/api.dart";
+import "../lib/remote_services/jira/api.dart";
 import "./helpers/mock_http_client.dart";
 import "./helpers/test_path.dart";
 
-String _scriptPath() {
-  return testFilePath(Platform.script.toString());
-}
+final _scriptPath = testFilePath(Platform.script.toString());
+final currentDirectory = dirname(_scriptPath);
 
 void main() {
   group("jira", () {
@@ -22,9 +16,8 @@ void main() {
       const host = "testdomain.atlassian.net";
       final mockHttpClient = new MockHttpClient();
       final jiraAPI =
-          new JiraRestAPI(host, "sample@email.com", "123NOT", mockHttpClient);
+          new JiraAPI(host, "sample@email.com", "123NOT", mockHttpClient);
       final time = new DateTime(2018, 4, 2);
-      final currentDirectory = dirname(_scriptPath());
       final filePath = normalize(join(currentDirectory, 'data/worklogs.json'));
       final jsonRawData = await new File(filePath).readAsString();
       final responseBuilder =
@@ -56,8 +49,7 @@ void main() {
       const host = "testdomain.atlassian.net";
       final mockHttpClient = new MockHttpClient();
       final jiraAPI =
-          new JiraRestAPI(host, "sample@email.com", "123NOT", mockHttpClient);
-      final currentDirectory = dirname(_scriptPath());
+          new JiraAPI(host, "sample@email.com", "123NOT", mockHttpClient);
       final filePath = normalize(join(currentDirectory, 'data/issue.json'));
       final jsonRawData = await new File(filePath).readAsString();
       final responseBuilder =
@@ -91,8 +83,7 @@ void main() {
       const host = "testdomain.atlassian.net";
       final mockHttpClient = new MockHttpClient();
       final jiraAPI =
-          new JiraRestAPI(host, "sample@email.com", "123NOT", mockHttpClient);
-      final currentDirectory = dirname(_scriptPath());
+          new JiraAPI(host, "sample@email.com", "123NOT", mockHttpClient);
       final filePath = normalize(join(currentDirectory, 'data/issue.json'));
       final jsonRawData = await new File(filePath).readAsString();
       final responseBuilder =
@@ -127,8 +118,7 @@ void main() {
       const host = "testdomain.atlassian.net";
       final mockHttpClient = new MockHttpClient();
       final jiraAPI =
-          new JiraRestAPI(host, "sample@email.com", "123NOT", mockHttpClient);
-      final currentDirectory = dirname(_scriptPath());
+          new JiraAPI(host, "sample@email.com", "123NOT", mockHttpClient);
       final filePath =
           normalize(join(currentDirectory, 'data/add_worklog.json'));
       final jsonRawData = await new File(filePath).readAsString();

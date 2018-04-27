@@ -22,18 +22,19 @@ class _HarvestConfigurationPage
         onChange: (String subdomain) {
           user.harvest.subdomain = subdomain;
         })));
-    controllers.add(new ControllableFormProperty(new FormProperty<String>.email(
-        name: 'Email',
-        initialValue: user.harvest.email,
-        onChange: (String email) {
-          user.harvest.email = email;
-        })));
     controllers
-        .add(new ControllableFormProperty(new FormProperty<String>.password(
-            name: 'Password',
-            onChange: (String password) {
-              user.harvest.password = password;
+        .add(new ControllableFormProperty(new FormProperty<String>.account(
+            name: 'Account id',
+            initialValue: user.harvest.accountId,
+            onChange: (String accountId) {
+              user.harvest.accountId = accountId;
             })));
+    controllers.add(new ControllableFormProperty(new FormProperty<String>.token(
+        name: 'Token',
+        initialValue: user.harvest.token,
+        onChange: (String token) {
+          user.harvest.token = token;
+        })));
     super.initialize();
   }
 }

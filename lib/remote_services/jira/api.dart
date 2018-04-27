@@ -2,14 +2,14 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import './jira_model.dart';
+import '../service_exception.dart';
 
-class JiraRestAPI {
+class JiraAPI {
   final String _host;
   Map<String, String> _baseHeaders;
-  Uri baseURI;
   http.Client _httpClient;
 
-  JiraRestAPI(this._host, username, password, [http.Client httpClient]) {
+  JiraAPI(this._host, username, password, [http.Client httpClient]) {
     final encodedUserPass = base64.encode(utf8.encode('$username:$password'));
     final authenticationHeader = 'Basic $encodedUserPass';
     _baseHeaders = {
@@ -42,12 +42,11 @@ class JiraRestAPI {
       final decodedJson = json.decode(res.body);
       return new AddWorklogResponse.fromJson(decodedJson);
     }
-    throw new JiraRestException(statusCode, body);
+    throw new RemoteServiceException(statusCode, body);
   }
 
   Future<SearchIssueResponse> retrievedWorkLogged(DateTime date) {
-    final formattedDate =
-        "${date.year.toString()}/${date.month.toString().padLeft(2,'0')}/${date.day.toString().padLeft(2,'0')}";
+    final formattedDate = date.toIso8601String().substring(0, 10);
     final issueRequest = new SearchIssueRequest(
         jql: 'worklogAuthor=currentUser() AND worklogDate = "$formattedDate"',
         startAt: 0,
@@ -109,6 +108,6 @@ class JiraRestAPI {
         return issueResponse;
       }
     }
-    throw new JiraRestException(statusCode, body);
+    throw new RemoteServiceException(statusCode, body);
   }
 }

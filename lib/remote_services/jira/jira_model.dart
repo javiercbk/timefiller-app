@@ -1,15 +1,3 @@
-class JiraRestException implements Exception {
-  int _statusCode;
-  String _message;
-
-  int get statusCode => _statusCode;
-  String get message => _message;
-
-  JiraRestException(this._statusCode, this._message);
-
-  String toString() => '$statusCode: $message';
-}
-
 class AddWorklogRequest {
   DateTime started;
   int timeSpentSeconds;

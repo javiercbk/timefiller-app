@@ -33,7 +33,7 @@ class FormProperty<T> {
       {this.fieldKey, @required this.name, this.initialValue, this.onChange}) {
     this.keyboardType = TextInputType.text;
     this.isPassword = true;
-    icon = Icons.lock;
+    icon = Icons.lock_outline;
   }
 
   FormProperty.url(
@@ -44,6 +44,26 @@ class FormProperty<T> {
       @required this.onChange}) {
     this.keyboardType = TextInputType.url;
     this.isPassword = false;
+  }
+
+  FormProperty.account(
+      {this.fieldKey,
+      @required this.name,
+      this.initialValue,
+      @required this.onChange}) {
+    this.keyboardType = TextInputType.text;
+    this.isPassword = false;
+    this.icon = Icons.account_box;
+  }
+
+  FormProperty.token(
+      {this.fieldKey,
+      @required this.name,
+      this.initialValue,
+      @required this.onChange}) {
+    this.keyboardType = TextInputType.text;
+    this.isPassword = false;
+    this.icon = Icons.lock_outline;
   }
 
   FormProperty.email(
