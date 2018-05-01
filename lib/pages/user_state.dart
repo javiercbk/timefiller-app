@@ -7,14 +7,26 @@ import '../model/models.dart';
 abstract class UserState<T extends StatefulWidget> extends State<T> {
   final EntityStorage<User> _userStorage = userStorage;
   @protected
+  bool initialized = false;
+  @protected
   User user = new User();
+
+  @protected
+  void onUserInitialized() {}
+
+  @protected
+  void setToUser() {}
 
   Future<Null> _getSharedPrefs() async {
     final userFromFile = await _userStorage.read;
     if (userFromFile != null) {
       setState(() {
         user = userFromFile;
+        initialized = true;
+        onUserInitialized();
       });
+    } else {
+      initialized = true;
     }
   }
 

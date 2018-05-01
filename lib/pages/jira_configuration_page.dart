@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import '../model/models.dart';
 import './user_configuration.dart';
 
 typedef void ChangeListener(String data);
@@ -11,31 +11,66 @@ class JiraConfigurationPage extends StatefulWidget {
 
 class _JiraConfigurationPage
     extends UserConfigurationPage<JiraConfigurationPage> {
-  _JiraConfigurationPage() : super();
+  _JiraConfigurationPage() : super('Jira');
+  final Jira _jira = new Jira(host: '', username: '', password: '');
+
+  @override
+  onUserInitialized() {
+    if (user.jira != null) {
+      if (user.jira.host != null) {
+        _jira.host = user.jira.host;
+      }
+      if (user.jira.username != null) {
+        _jira.username = user.jira.username;
+      }
+    }
+  }
+
+  @override
+  setToUser() {
+    if (user.jira == null) {
+      user.jira = new Jira();
+    }
+    user.jira.host = _jira.host;
+    user.jira.username = _jira.username;
+    if (user.jira.password == null || _jira.password.length > 0) {
+      user.jira.password = _jira.password;
+    }
+  }
+
+  @override
+  void deleteAccount() {
+    user.jira = null;
+    saveUser();
+    super.deleteAccount();
+  }
+
+  bool hasPreviousValue() {
+    return user.jira != null;
+  }
 
   @override
   initialize() {
-    controllers.add(new ControllableFormProperty(new FormProperty<String>(
+    formProperties.add(new FormProperty<String>(
         icon: Icons.home,
         name: 'Host',
         keyboardType: TextInputType.url,
-        initialValue: user.jira.host,
+        initialValue: _jira.host,
         isPassword: false,
         onChange: (String host) {
-          user.jira.host = host;
-        })));
-    controllers.add(new ControllableFormProperty(new FormProperty<String>.email(
+          _jira.host = host;
+        }));
+    formProperties.add(new FormProperty<String>.email(
         name: 'Email',
-        initialValue: user.jira.username,
+        initialValue: _jira.username,
         onChange: (String username) {
-          user.jira.username = username;
-        })));
-    controllers
-        .add(new ControllableFormProperty(new FormProperty<String>.password(
-            name: 'Password',
-            onChange: (String password) {
-              user.jira.password = password;
-            })));
+          _jira.username = username;
+        }));
+    formProperties.add(new FormProperty<String>.password(
+        name: 'Password',
+        onChange: (String password) {
+          _jira.password = password;
+        }));
     super.initialize();
   }
 }

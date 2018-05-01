@@ -9,25 +9,20 @@ class Jira extends JSONSerializable {
   String username;
   String password;
 
-  Jira() {
-    host = '';
-    username = '';
-    password = '';
+  Jira({this.host, this.username, this.password});
+
+  Jira.fromJson(Map<String, dynamic> json) {
+    host = json['host'];
+    username = json['username'];
+    password = json['password'];
   }
 
-  Jira.fromJson(Map<String, dynamic> json)
-      : host = json['host'],
-        username = json['username'],
-        password = json['password'];
-
-  Map<String, dynamic> toJson() =>
-      {host: 'host', username: 'username', password: 'password'};
-
-  bool get completed {
-    final completedHost = host != null && host.isNotEmpty;
-    final completedUsername = username != null && username.isNotEmpty;
-    final completedPassword = password != null && password.isNotEmpty;
-    return completedHost && completedUsername && completedPassword;
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['host'] = this.host;
+    data['username'] = this.username;
+    data['password'] = this.password;
+    return data;
   }
 }
 
@@ -36,41 +31,36 @@ class Harvest extends JSONSerializable {
   String accountId;
   String token;
 
-  Harvest() {
-    subdomain = '';
-    accountId = '';
-    token = '';
+  Harvest({this.subdomain, this.accountId, this.token});
+
+  Harvest.fromJson(Map<String, dynamic> json) {
+    subdomain = json['subdomain'];
+    accountId = json['accountId'];
+    token = json['token'];
   }
 
-  Harvest.fromJson(Map<String, dynamic> json)
-      : subdomain = json['subdomain'],
-        accountId = json['accountId'],
-        token = json['token'];
-
-  Map<String, dynamic> toJson() =>
-      {subdomain: 'subdomain', accountId: 'accountId', token: 'token'};
-
-  bool get completed {
-    final completedSubdomain = subdomain != null && subdomain.isNotEmpty;
-    final completedEmail = accountId != null && accountId.isNotEmpty;
-    final completedPassword = accountId != null && accountId.isNotEmpty;
-    return completedSubdomain && completedEmail && completedPassword;
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['subdomain'] = this.subdomain;
+    data['accountId'] = this.accountId;
+    data['token'] = this.token;
+    return data;
   }
 }
 
 class Waka extends JSONSerializable {
   String apiKey;
 
-  Waka() {
-    apiKey = '';
+  Waka({this.apiKey});
+
+  Waka.fromJson(Map<String, dynamic> json) {
+    apiKey = json['apiKey'];
   }
 
-  Waka.fromJson(Map<String, dynamic> json) : apiKey = json['apiKey'];
-
-  Map<String, dynamic> toJson() => {apiKey: 'apiKey'};
-
-  bool get completed {
-    return apiKey != null && apiKey.isNotEmpty;
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['apiKey'] = this.apiKey;
+    return data;
   }
 }
 
@@ -79,29 +69,40 @@ class User extends JSONSerializable {
   Harvest harvest;
   Waka waka;
 
-  User() {
-    jira = new Jira();
-    harvest = new Harvest();
-    waka = new Waka();
-  }
+  User();
 
   User.fromJson(Map<String, dynamic> json) {
-    this.jira = new Jira.fromJson(json['jira']);
-    this.harvest = new Harvest.fromJson(json['harvest']);
-    this.waka = new Waka.fromJson(json['waka']);
+    if (json['jira'] != null) {
+      jira = new Jira.fromJson(json['jira']);
+    }
+    if (json['harvest'] != null) {
+      harvest = new Harvest.fromJson(json['harvest']);
+    }
+    if (json['waka'] != null) {
+      waka = new Waka.fromJson(json['waka']);
+    }
   }
 
-  Map<String, dynamic> toJson() => {
-        'jira': this.jira.toJson(),
-        'harvest': this.harvest.toJson(),
-        'waka': this.waka.toJson()
-      };
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (jira != null) {
+      data['jira'] = jira.toJson();
+    }
+    if (harvest != null) {
+      data['harvest'] = harvest.toJson();
+    }
+    if (waka != null) {
+      data['waka'] = waka.toJson();
+    }
+    return data;
+  }
 
-  bool get completed {
-    final jiraCompleted = jira != null && jira.completed;
-    final harvestCompleted = harvest != null && harvest.completed;
-    final wakaCompleted = waka != null && waka.completed;
-    return jiraCompleted && harvestCompleted && wakaCompleted;
+  bool get hasTargetTimeTracker {
+    return jira != null || harvest != null;
+  }
+
+  bool get hasSourceTimeTracker {
+    return waka != null;
   }
 }
 

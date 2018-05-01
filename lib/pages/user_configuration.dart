@@ -1,14 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import './user_state.dart';
+import '../widgets/loading_screen.dart';
 import '../widgets/form/password.dart';
 
 typedef void ChangeListener(String data);
 
 class FormProperty<T> {
   final Key fieldKey;
+  FormFieldValidator<String> validator;
   bool isPassword;
   IconData icon;
   String name;
@@ -23,6 +24,7 @@ class FormProperty<T> {
       this.onChange,
       @required this.icon,
       this.keyboardType,
+      this.validator,
       this.isPassword}) {
     if (this.keyboardType == null) {
       this.keyboardType = TextInputType.text;
@@ -77,97 +79,149 @@ class FormProperty<T> {
   }
 }
 
-class ControllableFormProperty<T> {
-  FormProperty<T> property;
-  TextEditingController controller;
-  VoidCallback listener;
-
-  ControllableFormProperty(this.property);
-}
-
-class UserConfigurationPage<T extends StatefulWidget> extends UserState<T> {
-  bool _initialized = false;
+abstract class UserConfigurationPage<T extends StatefulWidget>
+    extends UserState<T> {
+  final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
+  String _title;
   @protected
-  List<ControllableFormProperty> controllers;
+  final List<FormProperty> formProperties = new List<FormProperty>();
 
-  UserConfigurationPage() {
-    controllers = new List<ControllableFormProperty<String>>();
-  }
+  UserConfigurationPage(this._title);
 
   @protected
-  initialize() {
-    controllers.forEach((c) {
-      c.controller = new TextEditingController();
-      c.listener = _initializeController(
-          c.controller, c.property.initialValue, c.property.onChange);
-    });
+  bool hasPreviousValue();
+  @protected
+  void deleteAccount() {
+    Navigator.pop(context);
   }
 
-  _controllerListenerBuilder(
-      TextEditingController controller, ChangeListener func) {
-    return () {
-      final newText = controller.text;
-      setState(() {
-        func(newText);
-      });
-    };
+  void _deleteAccount() {
+    () async {
+      final shouldDelete = await showDialog<bool>(
+          context: context,
+          builder: (BuildContext context) {
+            return new AlertDialog(
+              title: new Text('Delete $_title'),
+              content:
+                  const Text('Are you sure you want to delete this account'),
+              actions: <Widget>[
+                new FlatButton(
+                  child: new Text('Cancel'),
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                ),
+                new FlatButton(
+                  child: new Text('Delete'),
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                  },
+                ),
+              ],
+            );
+          });
+      if (shouldDelete) {
+        deleteAccount();
+      }
+    }();
   }
 
-  VoidCallback _initializeController(
-      TextEditingController controller, String data, ChangeListener listener) {
-    controller.text = data;
-    final controllerListener = _controllerListenerBuilder(controller, listener);
-    controller.addListener(controllerListener);
-    return controllerListener;
+  List<Widget> _formButtons() {
+    List<Widget> buttons = new List<Widget>();
+    final saveButton = new RaisedButton(
+      color: Colors.blue,
+      child: new Text(
+        'Save',
+      ),
+      onPressed: _submit,
+    );
+    if (hasPreviousValue()) {
+      buttons.add(new RaisedButton(
+        color: new Color.fromARGB(1, 239, 83, 80),
+        child: new Text(
+          'Delete',
+        ),
+        onPressed: _deleteAccount,
+      ));
+    }
+    buttons.add(saveButton);
+    return buttons;
   }
 
-  @override
-  void dispose() {
-    saveUser();
-    controllers.forEach((c) {
-      c.controller.removeListener(c.listener);
-    });
-    super.dispose();
-  }
-
-  List<ListTile> _buildFormWidgets() {
-    return this.controllers.map((c) {
+  List<Widget> _buildFormWidgets() {
+    List<Widget> widgets = new List<Widget>();
+    this.formProperties.forEach((p) {
       Widget field;
-      if (c.property.isPassword) {
-        field = new PasswordField(
-          fieldKey: c.property.fieldKey,
-          hintText: c.property.name,
-          onSaved: c.property.onChange,
+      if (p.isPassword) {
+        field = new PasswordFormField(
+          fieldKey: p.fieldKey,
+          hintText: p.name,
+          onSaved: p.onChange,
         );
       } else {
-        field = new TextField(
+        field = new TextFormField(
           autocorrect: false,
-          keyboardType: c.property.keyboardType,
-          controller: c.controller,
-          decoration: new InputDecoration(hintText: c.property.name),
+          keyboardType: p.keyboardType,
+          initialValue: p.initialValue,
+          validator: p.validator,
+          decoration: new InputDecoration(hintText: p.name),
+          onSaved: p.onChange,
         );
       }
-      return new ListTile(
-        leading: new Icon(c.property.icon),
+      widgets.add(new ListTile(
+        leading: new Icon(p.icon),
         title: field,
-      );
-    }).toList();
+      ));
+    });
+    widgets.add(new Expanded(
+      child: new Container(
+        child: new Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: _formButtons(),
+        ),
+        margin: new EdgeInsets.only(bottom: 20.0),
+      ),
+    ));
+    return widgets;
+  }
+
+  void _submit() {
+    // First validate form.
+    if (this._formKey.currentState.validate()) {
+      _formKey.currentState.save();
+      saveUser().then((Null n) {
+        Navigator.pop(context);
+      });
+    }
+  }
+
+  @protected
+  void initialize() {}
+
+  Widget _buildForm() {
+    final formWidgets = _buildFormWidgets();
+    return new Container(
+        child: new Form(
+      key: this._formKey,
+      child: new Column(children: formWidgets),
+    ));
   }
 
   @override
   Widget build(BuildContext context) {
-    if (!_initialized) {
+    Widget component;
+    if (initialized) {
+      component = _buildForm();
+    } else {
       initialize();
-      _initialized = true;
+      initialized = true;
+      component = new LoadingScreen();
     }
-    Iterable<Widget> formWidgets = _buildFormWidgets();
     return new Material(
       color: Colors.blue,
       child: new Scaffold(
-        appBar: new AppBar(title: const Text('Jira')),
-        body:
-            new SingleChildScrollView(child: new Column(children: formWidgets)),
-      ),
+          appBar: new AppBar(title: new Text(_title)), body: component),
     );
   }
 }

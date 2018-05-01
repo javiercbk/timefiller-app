@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import '../model/models.dart';
 import './user_configuration.dart';
 
 class HarvestConfigurationPage extends StatefulWidget {
@@ -9,32 +9,65 @@ class HarvestConfigurationPage extends StatefulWidget {
 
 class _HarvestConfigurationPage
     extends UserConfigurationPage<HarvestConfigurationPage> {
-  _HarvestConfigurationPage() : super();
+  _HarvestConfigurationPage() : super('Harvest');
+  final Harvest _harvest = new Harvest(accountId: '', subdomain: '', token: '');
+
+  @override
+  onUserInitialized() {
+    if (user.harvest != null) {
+      if (user.harvest.accountId != null) {
+        _harvest.accountId = user.harvest.accountId;
+      }
+      if (user.harvest.subdomain != null) {
+        _harvest.subdomain = user.harvest.subdomain;
+      }
+    }
+  }
+
+  @override
+  setToUser() {
+    if (user.harvest == null) {
+      user.harvest = new Harvest();
+    }
+    user.harvest.accountId = _harvest.accountId;
+    user.harvest.subdomain = _harvest.subdomain;
+    user.harvest.token = _harvest.token;
+  }
+
+  @override
+  void deleteAccount() {
+    user.harvest = null;
+    saveUser();
+    super.deleteAccount();
+  }
+
+  bool hasPreviousValue() {
+    return user.harvest != null;
+  }
 
   @override
   initialize() {
-    controllers.add(new ControllableFormProperty(new FormProperty<String>(
+    formProperties.add(new FormProperty<String>(
         icon: Icons.home,
         name: 'Subdomain',
         keyboardType: TextInputType.url,
-        initialValue: user.harvest.subdomain,
+        initialValue: _harvest.subdomain,
         isPassword: false,
         onChange: (String subdomain) {
-          user.harvest.subdomain = subdomain;
-        })));
-    controllers
-        .add(new ControllableFormProperty(new FormProperty<String>.account(
-            name: 'Account id',
-            initialValue: user.harvest.accountId,
-            onChange: (String accountId) {
-              user.harvest.accountId = accountId;
-            })));
-    controllers.add(new ControllableFormProperty(new FormProperty<String>.token(
+          _harvest.subdomain = subdomain;
+        }));
+    formProperties.add(new FormProperty<String>.account(
+        name: 'Account id',
+        initialValue: _harvest.accountId,
+        onChange: (String accountId) {
+          _harvest.accountId = accountId;
+        }));
+    formProperties.add(new FormProperty<String>.token(
         name: 'Token',
-        initialValue: user.harvest.token,
+        initialValue: _harvest.token,
         onChange: (String token) {
-          user.harvest.token = token;
-        })));
+          _harvest.token = token;
+        }));
     super.initialize();
   }
 }

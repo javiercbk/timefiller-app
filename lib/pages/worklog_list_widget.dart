@@ -30,12 +30,12 @@ class _WorklogListState extends State<WorklogListWidget> {
   @override
   Widget build(BuildContext context) {
     return new Material(
-        color: Colors.blue,
+        color: Colors.grey,
         child: new Row(children: [
           new Expanded(
               child: new ListTile(
                   leading: const Icon(Icons.hourglass_empty),
-                  title: new Text("Now worklogs recorded")))
+                  title: new Text("No worklogs recorded")))
         ]));
   }
 }
