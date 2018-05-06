@@ -8,7 +8,6 @@ abstract class UserState<T extends StatefulWidget> extends State<T> {
   final EntityStorage<User> _userStorage = userStorage;
   @protected
   bool initialized = false;
-  @protected
   User user = new User();
 
   Future<Null> initialize() async {
