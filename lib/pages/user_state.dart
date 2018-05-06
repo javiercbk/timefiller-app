@@ -11,33 +11,22 @@ abstract class UserState<T extends StatefulWidget> extends State<T> {
   @protected
   User user = new User();
 
-  @protected
-  void onUserInitialized() {}
-
-  @protected
-  void setToUser() {}
-
-  Future<Null> _getSharedPrefs() async {
-    final userFromFile = await _userStorage.read;
+  Future<Null> initialize() async {
+    final userFromFile = await _userStorage.read();
     if (userFromFile != null) {
       setState(() {
         user = userFromFile;
         initialized = true;
-        onUserInitialized();
       });
     } else {
-      initialized = true;
+      setState(() {
+        initialized = true;
+      });
     }
   }
 
   @protected
   Future<Null> saveUser() async {
     await _userStorage.write(user);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _getSharedPrefs();
   }
 }

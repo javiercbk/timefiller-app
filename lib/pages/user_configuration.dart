@@ -92,8 +92,11 @@ abstract class UserConfigurationPage<T extends StatefulWidget>
   bool hasPreviousValue();
   @protected
   void deleteAccount() {
-    Navigator.pop(context);
+    Navigator.pop(context, user);
   }
+
+  @protected
+  void setToUser();
 
   void _deleteAccount() {
     () async {
@@ -190,14 +193,12 @@ abstract class UserConfigurationPage<T extends StatefulWidget>
     // First validate form.
     if (this._formKey.currentState.validate()) {
       _formKey.currentState.save();
+      setToUser();
       saveUser().then((Null n) {
-        Navigator.pop(context);
+        Navigator.pop(context, user);
       });
     }
   }
-
-  @protected
-  void initialize() {}
 
   Widget _buildForm() {
     final formWidgets = _buildFormWidgets();
@@ -215,7 +216,6 @@ abstract class UserConfigurationPage<T extends StatefulWidget>
       component = _buildForm();
     } else {
       initialize();
-      initialized = true;
       component = new LoadingScreen();
     }
     return new Material(

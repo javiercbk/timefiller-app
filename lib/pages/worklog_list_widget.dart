@@ -13,7 +13,7 @@ class _WorklogListState extends State<WorklogListWidget> {
   List<Worklog> worklogs;
 
   Future<Null> getSharedPrefs() async {
-    final worklogsFromFile = await this._worklogStorage.read;
+    final worklogsFromFile = await this._worklogStorage.read();
     if (worklogsFromFile != null) {
       setState(() {
         worklogs = worklogsFromFile;

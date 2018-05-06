@@ -112,16 +112,12 @@ class _AccountsPage extends UserState<AccountsPage> {
   }
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     Widget component;
     if (initialized) {
       component = _buildComponent();
     } else {
+      initialize();
       component = new LoadingScreen();
     }
     return new Scaffold(
@@ -141,16 +137,12 @@ class __AddAccountPage extends UserState<_AddAccountPage> {
   }
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     Widget component;
     if (initialized) {
       component = _buildAddAccountsComponent();
     } else {
+      initialize();
       component = new LoadingScreen();
     }
     return new Scaffold(

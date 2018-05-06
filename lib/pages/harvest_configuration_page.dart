@@ -13,18 +13,6 @@ class _HarvestConfigurationPage
   final Harvest _harvest = new Harvest(accountId: '', subdomain: '', token: '');
 
   @override
-  onUserInitialized() {
-    if (user.harvest != null) {
-      if (user.harvest.accountId != null) {
-        _harvest.accountId = user.harvest.accountId;
-      }
-      if (user.harvest.subdomain != null) {
-        _harvest.subdomain = user.harvest.subdomain;
-      }
-    }
-  }
-
-  @override
   setToUser() {
     if (user.harvest == null) {
       user.harvest = new Harvest();
@@ -46,28 +34,38 @@ class _HarvestConfigurationPage
   }
 
   @override
-  initialize() {
-    formProperties.add(new FormProperty<String>(
-        icon: Icons.home,
-        name: 'Subdomain',
-        keyboardType: TextInputType.url,
-        initialValue: _harvest.subdomain,
-        isPassword: false,
-        onChange: (String subdomain) {
-          _harvest.subdomain = subdomain;
-        }));
-    formProperties.add(new FormProperty<String>.account(
-        name: 'Account id',
-        initialValue: _harvest.accountId,
-        onChange: (String accountId) {
-          _harvest.accountId = accountId;
-        }));
-    formProperties.add(new FormProperty<String>.token(
-        name: 'Token',
-        initialValue: _harvest.token,
-        onChange: (String token) {
-          _harvest.token = token;
-        }));
-    super.initialize();
+  initialize() async {
+    await super.initialize();
+    setState(() {
+      if (user.harvest != null) {
+        if (user.harvest.accountId != null) {
+          _harvest.accountId = user.harvest.accountId;
+        }
+        if (user.harvest.subdomain != null) {
+          _harvest.subdomain = user.harvest.subdomain;
+        }
+      }
+      formProperties.add(new FormProperty<String>(
+          icon: Icons.home,
+          name: 'Subdomain',
+          keyboardType: TextInputType.url,
+          initialValue: _harvest.subdomain,
+          isPassword: false,
+          onChange: (String subdomain) {
+            _harvest.subdomain = subdomain;
+          }));
+      formProperties.add(new FormProperty<String>.account(
+          name: 'Account id',
+          initialValue: _harvest.accountId,
+          onChange: (String accountId) {
+            _harvest.accountId = accountId;
+          }));
+      formProperties.add(new FormProperty<String>.token(
+          name: 'Token',
+          initialValue: _harvest.token,
+          onChange: (String token) {
+            _harvest.token = token;
+          }));
+    });
   }
 }

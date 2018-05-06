@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import './pages/landing_page.dart';
+import './storage/timefiller_storage.dart';
 
-void main() => runApp(new MyApp());
+void main() async {
+  await userStorage.read();
+  runApp(new MyApp());
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.

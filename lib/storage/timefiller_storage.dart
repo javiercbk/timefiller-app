@@ -6,7 +6,7 @@ import 'package:path_provider/path_provider.dart';
 
 abstract class EntityStorage<T> {
   Future<File> write(T data);
-  Future<T> get read;
+  Future<T> read();
 }
 
 abstract class FileEntityStorate<T> implements EntityStorage<T> {
@@ -53,11 +53,11 @@ class CachedEntityStorage<T> implements EntityStorage<T> {
     return this._storage.write(data);
   }
 
-  Future<T> get read async {
+  Future<T> read() async {
     if (this._cache != null) {
       return this._cache;
     }
-    return await this._storage.read;
+    return await this._storage.read();
   }
 }
 
@@ -69,7 +69,7 @@ class UserStorage extends FileEntityStorate<User> {
     return await this.writeString(stringData);
   }
 
-  Future<User> get read async {
+  Future<User> read() async {
     final strData = await this.readString;
     if (strData != null) {
       final Map<String, dynamic> rawData = Convert.jsonDecode(strData);
@@ -88,7 +88,7 @@ class WorklogStorage extends FileEntityStorate<List<Worklog>> {
     return await this.writeString(stringData);
   }
 
-  Future<List<Worklog>> get read async {
+  Future<List<Worklog>> read() async {
     final strData = await this.readString;
     if (strData != null) {
       final List<Map<String, dynamic>> rawData = Convert.jsonDecode(strData);
